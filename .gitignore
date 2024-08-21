@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# PyInstaller
+*.spec
+dist/
+build/
+*.egg-info
+
+# IDEs
+.vscode/
+.idea/
+
+# Outras configurações
+.DS_Store
+.env
+.mypy_cache/
+.tox/
+.nox/
+.coverage
+*.log
