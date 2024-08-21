@@ -32,24 +32,35 @@ class Core:
                 if line.strip() == '[General]':
                     in_general_section = True
                     file.write(line)
-                    if not language_updated:
+                    if selected_language != 'en':
                         file.write(f'sLanguage={selected_language}\n')
                         language_updated = True
                 elif line.startswith('['):
-                    if in_general_section:
-                        in_general_section = False
+                    if in_general_section and not language_updated and selected_language != 'en':
+                        file.write(f'sLanguage={selected_language}\n')
+                        language_updated = True
+                    in_general_section = False
                     file.write(line)
-                elif line.startswith('sLanguage='):
-                    if not language_updated:
+                elif in_general_section and line.startswith('sLanguage='):
+                    if selected_language == 'en':
+                        continue
+                    elif not language_updated:
                         file.write(f'sLanguage={selected_language}\n')
                         language_updated = True
                 else:
                     file.write(line)
 
-            if not language_updated and in_general_section:
+            if in_general_section and not language_updated and selected_language != 'en':
                 file.write(f'sLanguage={selected_language}\n')
-        
-        return f'Altered language to {selected_language} and Backup created.'
+
+        return f'Altered language to {selected_language if selected_language != "en" else "English"} and Backup created.'
 
     def validate_language_file(self, file_name):
         return file_name.startswith('Starfield_') and file_name.endswith('.ini')
+    
+    def get_current_language(self):
+        with open(self.ini_file, 'r') as file:
+            for line in file:
+                if line.startswith('sLanguage='):
+                    return line.strip().split('=')[1].lower()
+        return 'en'

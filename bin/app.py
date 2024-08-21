@@ -11,7 +11,6 @@ class App:
 
         self.root.geometry('400x300')
         self.root.resizable(False, False)
-
         self.root.configure(bg='#f5f5f7')
 
         self.button_frame = tk.Frame(root, bg='#f5f5f7')
@@ -44,7 +43,6 @@ class App:
 
         self.combobox = ttk.Combobox(root, font=('Arial', 12), state='readonly')
         self.combobox.pack(pady=10, fill=tk.X, padx=20)
-        self.update_language_list()
 
         self.style = ttk.Style()
         self.style.configure('TCombobox',
@@ -57,32 +55,56 @@ class App:
         self.style.map('TCombobox',
             fieldbackground=[('readonly', '#ffffff')],
             background=[('readonly', '#ffffff')],
-            bordercolor=[('readonly', '#d1d5da')]
+            bordercolor=[('readonly', '#d1d5d')]
         )
 
         self.message_label = tk.Label(root, text='', fg='green', bg='#f5f5f7', font=('Arial', 12))
         self.message_label.pack(pady=5)
 
+        self.language_map = {
+            'it': 'Italiano',
+            'pl': 'Polski',
+            'ptbr': 'Português-BR',
+            'zhhans': '简体中文',
+            'en': 'English'
+        }
+
+        self.update_language_list()
+        self.preselect_language()
+
     def apply_language(self):
-        selected_language = self.combobox.get()
-        if selected_language:
-            message = self.core.update_ini_file(selected_language)
+        selected_language_display = self.combobox.get()
+        selected_language_code = self.get_language_code(selected_language_display)
+        if selected_language_code:
+            message = self.core.update_ini_file(selected_language_code)
             self.show_message(message)
         else:
             self.show_message('No selected language.')
 
     def update_language_list(self):
-        self.combobox['values'] = [] 
+        self.combobox['values'] = []
         language_files = self.core.list_language_files()
         language_list = [file[len('Starfield_'):-len('.ini')] for file in language_files]
-        self.combobox['values'] = language_list
+        display_names = [self.language_map.get(lang, lang) for lang in language_list]
+        self.combobox['values'] = display_names
+
+    def preselect_language(self):
+        current_language_code = self.core.get_current_language()
+        display_name = self.language_map.get(current_language_code, 'English')  # 'English' como fallback
+        self.combobox.set(display_name)
+
+    def get_language_code(self, display_name):
+        for code, name in self.language_map.items():
+            if name == display_name:
+                return code
+        return display_name
 
     def reselect_directory(self):
         try:
-            new_path = select_directory() 
+            new_path = select_directory()
             self.core = Core(new_path)
             self.update_language_list()
-            self.show_message(f'New Select Directoryo: {new_path}')
+            self.show_message(f'New Select Directory: {new_path}')
         except ValueError as e:
             self.show_message(f'Error when selecting directory: {e}')
 

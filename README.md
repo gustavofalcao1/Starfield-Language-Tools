@@ -1,6 +1,8 @@
 # Starfield-Language-Tools
 Since Bethesda Game Studios didn't put a simple option to change the game's language, I created this simple application to do it for them.
 
+[Windows Download](https://github.com/gustavofalcao1/Starfield-Language-Tools/releases)
+
 * Python
 * tkinter
 
@@ -15,6 +17,10 @@ Since Bethesda Game Studios didn't put a simple option to change the game's lang
 ### Run
 ```
   python main.py
+```
+### Build
+```
+  pyinstaller --onefile --windowed main.py
 ```
 
 <!-- ## Screenshots
