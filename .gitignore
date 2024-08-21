@@ -1,9 +1,0 @@
-*.pyc
-*.pyo
-__pycache__/
-*.spec
-.vscode/
-venv/
-env/
-*.exe
-*.zip
