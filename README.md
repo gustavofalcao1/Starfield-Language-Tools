@@ -11,7 +11,7 @@ Since Bethesda Game Studios didn't put a simple option to change the game's lang
 
 ## Features
 - [x] Change Starfield Language
-- [ ] Change Starfield Audio
+- [X] Change Starfield Audio [en] [es] [de] [fr] [jp]
 
 ## Exec
 ### Run
